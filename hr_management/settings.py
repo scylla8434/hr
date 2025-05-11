@@ -94,7 +94,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'hr_management',
         'USER': 'root',
-        'PASSWORD': 'Scylla@8434',  # Replace this with your actual MySQL root password
+        'PASSWORD': 'haha-got you',  # Replace this with your actual MySQL root password
         'HOST': 'localhost',
         'PORT': '3306',
     }
@@ -164,7 +164,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'teddyanangwe@gmail.com'  # Your Gmail address
-EMAIL_HOST_PASSWORD = 'bosx ibze rghx bqve'  # Your Gmail App Password
+EMAIL_HOST_PASSWORD = 'haha..got you'  # Your Gmail App Password
 DEFAULT_FROM_EMAIL = 'teddyanangwe@gmail.com'
 
 # Django AllAuth settings
