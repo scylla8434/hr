@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ plan.name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2 mb-0">{{ plan.name }}</h1>
+        <div class="btn-group">
+            <a href="{% url 'benefits:plan_edit' plan.pk %}" class="btn btn-outline-secondary">
+                <i class="fas fa-edit me-1"></i>Edit
+            </a>
+            <a href="{% url 'benefits:plan_delete' plan.pk %}" class="btn btn-outline-danger">
+                <i class="fas fa-trash me-1"></i>Delete
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <span class="badge bg-{{ plan.plan_type|lower }} mb-2">{{ plan.get_plan_type_display }}</span>
+                            <span class="badge bg-{{ plan.status|lower }}">{{ plan.get_status_display }}</span>
+                        </div>
+                        <div class="text-muted">
+                            <small>Created: {{ plan.created_at|date:"M d, Y" }}</small>
+                        </div>
+                    </div>
+
+                    <h5 class="card-title">Description</h5>
+                    <p class="card-text">{{ plan.description }}</p>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h5 class="card-title">Plan Details</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="fas fa-building me-2 text-muted"></i>
+                                    Provider: {{ plan.provider }}
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-dollar-sign me-2 text-muted"></i>
+                                    Monthly Cost: ${{ plan.monthly_cost }}
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-calendar me-2 text-muted"></i>
+                                    Start Date: {{ plan.start_date|date:"M d, Y" }}
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-calendar me-2 text-muted"></i>
+                                    End Date: {{ plan.end_date|date:"M d, Y" }}
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="card-title">Coverage Details</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="fas fa-percentage me-2 text-muted"></i>
+                                    Coverage Percentage: {{ plan.coverage_percentage }}%
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-user me-2 text-muted"></i>
+                                    Eligible Employees: {{ plan.eligible_employees }}
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-file-alt me-2 text-muted"></i>
+                                    Documentation Required: {{ plan.documentation_required|yesno:"Yes,No" }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Enrollments</h5>
+                    {% if enrollments %}
+                    <div class="list-group list-group-flush">
+                        {% for enrollment in enrollments %}
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">{{ enrollment.employee.get_full_name }}</h6>
+                                    <small class="text-muted">Enrolled: {{ enrollment.enrollment_date|date:"M d, Y" }}</small>
+                                </div>
+                                <span class="badge bg-{{ enrollment.status|lower }}">{{ enrollment.get_status_display }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted">No enrollments yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

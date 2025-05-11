@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Enrollment Details{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2 mb-0">Enrollment Details</h1>
+        <div class="btn-group">
+            <a href="{% url 'benefits:enrollment_edit' enrollment.pk %}" class="btn btn-outline-secondary">
+                <i class="fas fa-edit me-1"></i>Edit
+            </a>
+            <a href="{% url 'benefits:enrollment_delete' enrollment.pk %}" class="btn btn-outline-danger">
+                <i class="fas fa-trash me-1"></i>Delete
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <span class="badge bg-{{ enrollment.status|lower }} mb-2">{{ enrollment.get_status_display }}</span>
+                            <h5 class="card-title mb-0">{{ enrollment.plan.name }}</h5>
+                            <p class="text-muted mb-0">{{ enrollment.plan.get_plan_type_display }}</p>
+                        </div>
+                        <div class="text-muted">
+                            <small>Enrolled: {{ enrollment.enrollment_date|date:"M d, Y" }}</small>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h5 class="card-title">Employee Information</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="fas fa-user me-2 text-muted"></i>
+                                    <a href="{% url 'users:profile' enrollment.employee.pk %}">
+                                        {{ enrollment.employee.get_full_name }}
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-id-card me-2 text-muted"></i>
+                                    Employee ID: {{ enrollment.employee.employee_id }}
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-building me-2 text-muted"></i>
+                                    Department: {{ enrollment.employee.department }}
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h5 class="card-title">Coverage Details</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="fas fa-calendar me-2 text-muted"></i>
+                                    Start Date: {{ enrollment.coverage_start_date|date:"M d, Y" }}
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-calendar me-2 text-muted"></i>
+                                    End Date: {{ enrollment.coverage_end_date|date:"M d, Y" }}
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-percentage me-2 text-muted"></i>
+                                    Coverage: {{ enrollment.plan.coverage_percentage }}%
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    {% if enrollment.notes %}
+                    <div class="mt-4">
+                        <h5 class="card-title">Notes</h5>
+                        <p class="card-text">{{ enrollment.notes|linebreaks }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Plan Information</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-building me-2 text-muted"></i>
+                            Provider: {{ enrollment.plan.provider }}
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-dollar-sign me-2 text-muted"></i>
+                            Monthly Cost: ${{ enrollment.plan.monthly_cost }}
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-file-alt me-2 text-muted"></i>
+                            Documentation: {{ enrollment.plan.documentation_required|yesno:"Required,Not Required" }}
+                        </li>
+                    </ul>
+
+                    <div class="mt-4">
+                        <a href="{% url 'benefits:plan_detail' enrollment.plan.pk %}" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-info-circle me-1"></i>View Plan Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

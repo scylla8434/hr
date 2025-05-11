@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Benefits Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2 mb-0">Benefits Dashboard</h1>
+        <div>
+            <a href="{% url 'benefits:enrollment_create' %}" class="btn btn-primary me-2">
+                <i class="fas fa-plus me-1"></i>New Enrollment
+            </a>
+            <a href="{% url 'benefits:participation_create' %}" class="btn btn-outline-primary">
+                <i class="fas fa-heartbeat me-1"></i>Join Wellness Program
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Recent Enrollments -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-file-alt me-2 text-primary"></i>Recent Enrollments
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if enrollments %}
+                        <div class="list-group list-group-flush">
+                            {% for enrollment in enrollments %}
+                                <a href="{% url 'benefits:enrollment_detail' enrollment.pk %}" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">{{ enrollment.benefit_plan.name }}</h6>
+                                        <small class="text-muted">{{ enrollment.start_date|date:"M d, Y" }}</small>
+                                    </div>
+                                    <p class="mb-1 text-muted">{{ enrollment.benefit_plan.get_type_display }}</p>
+                                    <small>
+                                        <span class="badge bg-{{ enrollment.status|lower }}">
+                                            {{ enrollment.get_status_display }}
+                                        </span>
+                                    </small>
+                                </a>
+                            {% endfor %}
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="{% url 'benefits:enrollment_list' %}" class="btn btn-link">View All Enrollments</a>
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center my-4">No recent enrollments found.</p>
+                        <div class="text-center">
+                            <a href="{% url 'benefits:enrollment_create' %}" class="btn btn-primary">Create Enrollment</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Wellness Programs -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-heartbeat me-2 text-primary"></i>Active Wellness Programs
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if wellness_programs %}
+                        <div class="list-group list-group-flush">
+                            {% for program in wellness_programs %}
+                                <a href="{% url 'benefits:wellness_detail' program.pk %}" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">{{ program.name }}</h6>
+                                        <small class="text-muted">{{ program.points_available }} points</small>
+                                    </div>
+                                    <p class="mb-1 text-muted">{{ program.description|truncatewords:20 }}</p>
+                                    <small>
+                                        <span class="badge bg-info">
+                                            {{ program.activities.count }} Activities
+                                        </span>
+                                    </small>
+                                </a>
+                            {% endfor %}
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="{% url 'benefits:wellness_list' %}" class="btn btn-link">View All Programs</a>
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center my-4">No active wellness programs found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Participations -->
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-trophy me-2 text-primary"></i>Recent Wellness Activities
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if participations %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Activity</th>
+                                        <th>Program</th>
+                                        <th>Status</th>
+                                        <th>Points Earned</th>
+                                        <th>Completion Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for participation in participations %}
+                                        <tr>
+                                            <td>{{ participation.activity.name }}</td>
+                                            <td>{{ participation.activity.program.name }}</td>
+                                            <td>
+                                                <span class="badge bg-{{ participation.status|lower }}">
+                                                    {{ participation.get_status_display }}
+                                                </span>
+                                            </td>
+                                            <td>{{ participation.points_earned }}</td>
+                                            <td>{{ participation.completion_date|default:"-"|date:"M d, Y" }}</td>
+                                            <td>
+                                                <a href="{% url 'benefits:participation_detail' participation.pk %}" class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="{% url 'benefits:participation_list' %}" class="btn btn-link">View All Activities</a>
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center my-4">No recent wellness activities found.</p>
+                        <div class="text-center">
+                            <a href="{% url 'benefits:participation_create' %}" class="btn btn-primary">Join an Activity</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Add any JavaScript for the dashboard here
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+</script>
+{% endblock %} 

@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if form.instance.pk %}Edit{% else %}New{% endif %} Activity{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="h2 mb-4">{% if form.instance.pk %}Edit{% else %}New{% endif %} Activity</h1>
+
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.name.id_for_label }}" class="form-label">Activity Name</label>
+                                {{ form.name }}
+                                {% if form.name.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.name.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.activity_type.id_for_label }}" class="form-label">Activity Type</label>
+                                {{ form.activity_type }}
+                                {% if form.activity_type.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.activity_type.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                            {{ form.description }}
+                            {% if form.description.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.description.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.program.id_for_label }}" class="form-label">Wellness Program</label>
+                                {{ form.program }}
+                                {% if form.program.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.program.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.points.id_for_label }}" class="form-label">Points</label>
+                                {{ form.points }}
+                                {% if form.points.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.points.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.due_date.id_for_label }}" class="form-label">Due Date</label>
+                                {{ form.due_date }}
+                                {% if form.due_date.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.due_date.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.duration.id_for_label }}" class="form-label">Duration (minutes)</label>
+                                {{ form.duration }}
+                                {% if form.duration.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.duration.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.location.id_for_label }}" class="form-label">Location</label>
+                                {{ form.location }}
+                                {% if form.location.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.location.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.max_participants.id_for_label }}" class="form-label">Max Participants</label>
+                                {{ form.max_participants }}
+                                {% if form.max_participants.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.max_participants.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.prerequisites.id_for_label }}" class="form-label">Prerequisites</label>
+                            {{ form.prerequisites }}
+                            {% if form.prerequisites.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.prerequisites.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                {{ form.documentation_required }}
+                                <label class="form-check-label" for="{{ form.documentation_required.id_for_label }}">
+                                    Documentation Required
+                                </label>
+                            </div>
+                            {% if form.documentation_required.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.documentation_required.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.status.id_for_label }}" class="form-label">Status</label>
+                            {{ form.status }}
+                            {% if form.status.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.status.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'benefits:activity_list' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Back to Activities
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>Save Activity
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Form validation
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        });
+    });
+</script>
+{% endblock %} 
